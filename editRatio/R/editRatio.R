@@ -1,16 +1,16 @@
-df <- read.csv(file = "DIST01real.csv", header = FALSE,stringsAsFactors = FALSE)
-#' Batch edit distance ratio
-#'\code{editRatio} returns the edit distance for multiple token utterances
-#'@param transcript a dataframe that contains target and produced transcription on alternating lines with each character as a separate dataframe value.
-#' @return the edit distance ratio, the number of Levenshtein edits divided by the length of the longest string
+x <- read.csv(file = "DIST01real.csv", header = FALSE,stringsAsFactors = FALSE)
+#' Calculate the edit distance ratio for phonetic transcriptions
+#'\code{editRatio} returns the edit distance comparing the target transcription(s) to the produced transcription(s).
+#'@param x a dataframe that contains target and produced transcription on alternating rows
+#'@return the edit distance ratio, the number of edits (Levenshtein, 1966) divided by the number of target or produced segments, whichever is greater.
 #'@examples
 #'transcript2<- data.frame("Transcription"=c("Saul", "Paul"))
 #'editRatio(transcript)
 editRatio <- function(x) {
   #df[!apply(df == "", 1, all),]
-  #transcript <- transcript[!apply(is.na(transcript) | transcript == "", 1, all),]
-  #x<-nrow(transcript)
-  #row.names(transcript) <- 1:x
+  x <- x[!apply(is.na(x) | x == "", 1, all),]
+  numrows<-nrow(x)
+  row.names(x) <- 1:numrows
   df.new <- (cbind(a = c("target","production"), x))
   #df.new <- data.frame(df.new)
     for (i in 1:nrow(df.new)){
@@ -56,10 +56,10 @@ editRatio <- function(x) {
   targetnum <- sum(dfdenom)
 
   if(prodnum>targetnum){
-    editdistance <- (c("editdistance", numerator/prodnum))
+    editdistance <- (numerator/prodnum)
     }
   if(targetnum>=prodnum){
-    editdistance <- (c("editdistance", numerator/targetnum))
+    editdistance <- (numerator/targetnum)
   }
   fn <- "levenshtein.csv"
   if (file.exists(fn)) file.remove(fn)
@@ -71,5 +71,8 @@ editRatio <- function(x) {
   if (file.exists(fn)) file.remove(fn)
   editdistance
 }
+#' @author Kevin T Cunningham
+#'@references Levenshtein, V. I. (1966). Binary codes capable of correcting deletions, insertions and reversals. Soviet Physics Doklady, 10 (8), 707–710.
+
 
 
