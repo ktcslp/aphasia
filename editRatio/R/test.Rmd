@@ -1,0 +1,6 @@
+#' Batch edit distance ratio
+#'\code{editRatio} returns the edit distance for multiple token utterances
+#'@param transcript a dataframe that contains target and produced transcription on alternating lines with each character as a separate dataframe value.
+#' @return the edit distance ratio, the number of Levenshtein edits divided by the length of the longest string
+#'@examples
+#'transcript<- data.frame("Transcription"=c("Saul", "Paul"))
